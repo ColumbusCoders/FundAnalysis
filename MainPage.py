@@ -18,12 +18,7 @@ dividend_desc = "Dividends are a portion of a company's profits that it distribu
 eps_desc = "Earnings Per Share (EPS) is a measure of a company's profitability that tells you how much profit it has generated for each outstanding share of its stock. It's calculated by dividing the company's total earnings by the number of shares available to the public. EPS helps investors gauge a company's financial performance and is a key factor in evaluating its stock's value and potential for growth"
 
 
-# Get dividends data
-def getDividends(ticker):
-    tkr = yf.Ticker(ticker)
-    div_data = tkr.dividends.to_frame()
-    div_data['year'] = div_data.index
-    return div_data.tail(40)
+
 
 # Get stock data
 def getTicker(ticker):
@@ -59,17 +54,7 @@ row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
 
 with row3_1:
     st.subheader("Dividends")
-    df= getDividends(ticker)
-    fig = px.bar(
-            df,
-            x="year",
-            y="Dividends",
-            title="Dividends Read by Year",
-            color_discrete_sequence=["#85e698"],
-        )
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
-    st.markdown(dividend_desc)
 
 with row3_2:
     st.subheader("EPS ")
