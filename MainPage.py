@@ -15,10 +15,10 @@ st.set_page_config(page_title="Fundamental Analysis App", layout="wide")
 
 
 
-st.text_input("Stock name", key="ticker",value="AAPL")
+ticker = st.text_input("Stock name", key="ticker",value="AAPL")
 
 
-st.header("{}".format(lib.getStockName(st.session_state.ticker)))
+st.header("{}".format(lib.getStockName(ticker)))
 
 # Row #1
 row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
@@ -27,7 +27,7 @@ row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
 
 with row3_1:
     st.subheader("Dividends")
-    df= lib.getDividends(st.session_state.ticker)
+    df= lib.getDividends(ticker)
     fig = px.bar(
             df,
             x="year",
@@ -41,7 +41,7 @@ with row3_1:
 
 with row3_2:
     st.subheader("EPS ")
-    df = lib.getTicker(st.session_state.ticker)
+    df = lib.getTicker(ticker)
     result_df = lib.formatIncomeStmtData(df.income_stmt)
 
     fig = px.bar(
@@ -66,7 +66,7 @@ row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
 
 with row4_1:
     st.subheader("Revenue")
-    df = lib.getTicker(st.session_state.ticker)
+    df = lib.getTicker(ticker)
     result_df = lib.formatIncomeStmtData(df.income_stmt)
 
     fig = px.bar(
@@ -82,7 +82,7 @@ with row4_1:
 
 with row4_2:
     st.subheader("Net Income")
-    df = lib.getTicker(st.session_state.ticker)
+    df = lib.getTicker(ticker)
     result_df = lib.formatIncomeStmtData(df.income_stmt)
 
     fig = px.bar(
