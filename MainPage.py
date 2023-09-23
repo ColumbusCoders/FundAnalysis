@@ -23,7 +23,7 @@ eps_desc = "Earnings Per Share (EPS) is a measure of a company's profitability t
 # Get dividends data
 def getDividends(ticker):
     tkr = yf.Ticker(ticker)
-    div_data = tkr.dividends
+    div_data = tkr.get_dividends()
     return div_data.tail(20)
 
 
