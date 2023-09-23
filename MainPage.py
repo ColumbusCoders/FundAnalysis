@@ -131,7 +131,115 @@ with tab1:
 
         st.markdown(eps_desc)
 
+    # Row # 2
+
+
+    row5_space1, row5_1, row5_space2, row5_2, row5_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
+
+    with row5_1:
+        st.subheader("Gross Profit ")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.income_stmt)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Gross Profit",
+                    title="Profit by Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#c681eb"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+        st.markdown(eps_desc)
 
     with st.expander("Reference Data"):
         df=getTicker(st.session_state.ticker ).incomestmt
+        st.dataframe(df.style.highlight_max(axis=1),use_container_width=True)
+
+with tab2:
+    # Row #1
+    row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
+
+    with row3_1:
+        st.subheader("Assets")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.balancesheet)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Total Assets",
+                    title="Total Assets over the Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#1aab6c"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        st.markdown("Yearly Income statement")
+
+    with row3_2:
+        st.subheader("Liabilities")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.balancesheet)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Total Liabilities Net Minority Interest",
+                    title="Total Liabilities over the Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#db831f"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        st.markdown("Yearly Income statement")
+
+    with st.expander("Reference Data"):
+        df=getTicker(st.session_state.ticker ).balancesheet
+        st.dataframe(df.style.highlight_max(axis=1),use_container_width=True)
+
+
+with tab3:
+    # Row #1
+    row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
+
+    with row3_1:
+        st.subheader("Cashflow")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.cashflow)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Free Cash Flow",
+                    title="Free Cashflow over the Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#bfdb1f"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        st.markdown("Yearly Income statement")
+
+    with row3_2:
+        st.subheader("Change in Cash")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.cashflow)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Changes In Cash",
+                    title="Free Cashflow over the Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#dbc81f"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        st.markdown("Yearly Income statement")
+
+    with st.expander("Reference Data"):
+        df=getTicker(st.session_state.ticker ).cashflow
         st.dataframe(df.style.highlight_max(axis=1),use_container_width=True)
