@@ -10,6 +10,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import yfinance as yf
+import pandas as pd
 
 
 # Functions Starts
@@ -18,6 +19,12 @@ dividend_desc = "Dividends are a portion of a company's profits that it distribu
 eps_desc = "Earnings Per Share (EPS) is a measure of a company's profitability that tells you how much profit it has generated for each outstanding share of its stock. It's calculated by dividing the company's total earnings by the number of shares available to the public. EPS helps investors gauge a company's financial performance and is a key factor in evaluating its stock's value and potential for growth"
 
 
+
+# Get dividends data
+def getDividends(ticker):
+    tkr = yf.Ticker(ticker)
+    div_data = tkr.dividends
+    return div_data.tail(20)
 
 
 # Get stock data
@@ -47,9 +54,60 @@ ticker = st.text_input("Stock name", key="ticker",value="AAPL")
 
 st.header("{}".format(getStockName(ticker)))
 
-tab1, tab2, tab3 = st.tabs(["Income Statement", "Balance Sheet", "Cash Flow"])
-
+tab1, tab2, tab3,tab4 = st.tabs(["Key Data","Income Statement", "Balance Sheet", "Cash Flow"])
 with tab1:
+
+    row1_space1, row1_1, row1_space2, row1_2, row1_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
+    with row1_1:
+        st.subheader("Profit Margins")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.income_stmt)
+        result_df['NPM'] = (result_df['Net Income'] / result_df['Total Revenue']) * 100
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="NPM",
+                    title="Net Profit Margins",
+                    text_auto=True,
+                    color_discrete_sequence=["#81c1eb"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+    with row1_2:
+        st.subheader("EPS ")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.income_stmt)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Basic EPS",
+                    title="EPS by Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#c681eb"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+        st.markdown(eps_desc)
+    row1_space2, row2_1, row2_space2, row2_2, row2_space3 = st.columns(
+            (0.1, 1, 0.1, 1, 0.1)
+        )
+    with row2_1:
+        st.subheader("Dividends ")
+        df = getDividends(ticker)
+        fig = px.bar(
+                df,
+                x=df.index,
+                y="Dividends",
+                title="Dividends Read by Year",
+                color_discrete_sequence=["#85e698"],
+            )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+        st.markdown(eps_desc)
+with tab2:
 
     # Row #1
     row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
@@ -159,7 +217,7 @@ with tab1:
         df=getTicker(st.session_state.ticker ).incomestmt
         st.dataframe(df.style.highlight_max(axis=1),use_container_width=True)
 
-with tab2:
+with tab3:
     # Row #1
     row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
         (0.1, 1, 0.1, 1, 0.1)
@@ -202,7 +260,7 @@ with tab2:
         st.dataframe(df.style.highlight_max(axis=1),use_container_width=True)
 
 
-with tab3:
+with tab4:
     # Row #1
     row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
         (0.1, 1, 0.1, 1, 0.1)
