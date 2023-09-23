@@ -1,0 +1,4 @@
+streamlit
+add_vertical_space
+plotly
+yfinance
