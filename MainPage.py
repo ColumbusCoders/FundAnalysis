@@ -9,7 +9,13 @@ import streamlit as st
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-import pages.Dividends as lib
+import Dividends as lib
+from Dividends import getStockName
+from Dividends import getDividends
+from Dividends import getTicker
+from Dividends import formatIncomeStmtData
+from Dividends import eps_desc
+from Dividends import dividend_desc
 
 
 st.set_page_config(page_title="Fundamental Analysis App", layout="wide")
@@ -19,7 +25,7 @@ st.set_page_config(page_title="Fundamental Analysis App", layout="wide")
 ticker = st.text_input("Stock name", key="ticker",value="AAPL")
 
 
-st.header("{}".format(lib.getStockName(ticker)))
+st.header("{}".format(getStockName(ticker)))
 
 # Row #1
 row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
@@ -28,7 +34,7 @@ row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
 
 with row3_1:
     st.subheader("Dividends")
-    df= lib.getDividends(ticker)
+    df= getDividends(ticker)
     fig = px.bar(
             df,
             x="year",
@@ -38,12 +44,12 @@ with row3_1:
         )
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
-    st.markdown(lib.dividend_desc)
+    st.markdown(dividend_desc)
 
 with row3_2:
     st.subheader("EPS ")
-    df = lib.getTicker(ticker)
-    result_df = lib.formatIncomeStmtData(df.income_stmt)
+    df = getTicker(ticker)
+    result_df = formatIncomeStmtData(df.income_stmt)
 
     fig = px.bar(
                 result_df,
@@ -55,7 +61,7 @@ with row3_2:
             )
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
-    st.markdown(lib.eps_desc)
+    st.markdown(eps_desc)
 
 # Row # 2
 
@@ -67,8 +73,8 @@ row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
 
 with row4_1:
     st.subheader("Revenue")
-    df = lib.getTicker(ticker)
-    result_df = lib.formatIncomeStmtData(df.income_stmt)
+    df = getTicker(ticker)
+    result_df = formatIncomeStmtData(df.income_stmt)
 
     fig = px.bar(
                 result_df,
@@ -83,8 +89,8 @@ with row4_1:
 
 with row4_2:
     st.subheader("Net Income")
-    df = lib.getTicker(ticker)
-    result_df = lib.formatIncomeStmtData(df.income_stmt)
+    df = getTicker(ticker)
+    result_df = formatIncomeStmtData(df.income_stmt)
 
     fig = px.bar(
                 result_df,
