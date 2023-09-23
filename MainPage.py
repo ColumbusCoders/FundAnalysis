@@ -47,68 +47,91 @@ ticker = st.text_input("Stock name", key="ticker",value="AAPL")
 
 st.header("{}".format(getStockName(ticker)))
 
-# Row #1
-row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
-    (0.1, 1, 0.1, 1, 0.1)
-)
+tab1, tab2, tab3 = st.tabs(["Income Statement", "Balance Sheet", "Cash Flow"])
 
-with row3_1:
-    st.subheader("Dividends")
+with tab1:
 
+    # Row #1
+    row3_space1, row3_1, row3_space2, row3_2, row3_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
 
-with row3_2:
-    st.subheader("EPS ")
-    df = getTicker(ticker)
-    result_df = formatIncomeStmtData(df.income_stmt)
+    with row3_1:
+        st.subheader("Revenue")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.income_stmt)
 
-    fig = px.bar(
-                result_df,
-                x="year",
-                y="Basic EPS",
-                title="EPS by Year",
-                text_auto=True,
-                color_discrete_sequence=["#c681eb"],
-            )
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-
-    st.markdown(eps_desc)
-
-# Row # 2
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Total Revenue",
+                    title="Revenue over the Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#81c1eb"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        st.markdown("Yearly Income statement")
 
 
-row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
-    (0.1, 1, 0.1, 1, 0.1)
-)
+    with row3_2:
+
+        st.subheader("Net Income")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.income_stmt)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Net Income",
+                    title="Net Income over the Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#e6859c"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        st.markdown("Yearly Income statement")
 
 
-with row4_1:
-    st.subheader("Revenue")
-    df = getTicker(ticker)
-    result_df = formatIncomeStmtData(df.income_stmt)
+    # Row # 2
 
-    fig = px.bar(
-                result_df,
-                x="year",
-                y="Total Revenue",
-                title="Revenue over the Year",
-                text_auto=True,
-                color_discrete_sequence=["#81c1eb"],
-            )
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-    st.markdown("Yearly Income statement")
 
-with row4_2:
-    st.subheader("Net Income")
-    df = getTicker(ticker)
-    result_df = formatIncomeStmtData(df.income_stmt)
+    row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
 
-    fig = px.bar(
-                result_df,
-                x="year",
-                y="Net Income",
-                title="Net Income over the Year",
-                text_auto=True,
-                color_discrete_sequence=["#e6859c"],
-            )
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-    st.markdown("Yearly Income statement")
+
+    with row4_1:
+        st.subheader("Operating Expense")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.income_stmt)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Operating Expense",
+                    title="Operating Expense by Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#e66e65"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+    with row4_2:
+        st.subheader("EPS ")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.income_stmt)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Basic EPS",
+                    title="EPS by Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#c681eb"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+        st.markdown(eps_desc)
+
+
+    with st.expander("Reference Data"):
+        df=getTicker(st.session_state.ticker ).incomestmt
+        st.dataframe(df.style.highlight_max(axis=1),use_container_width=True)
