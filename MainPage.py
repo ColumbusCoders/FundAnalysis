@@ -9,7 +9,8 @@ import streamlit as st
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-import Dividends as lib
+import pages.Dividends as lib
+
 
 st.set_page_config(page_title="Fundamental Analysis App", layout="wide")
 
