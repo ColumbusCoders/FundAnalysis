@@ -19,14 +19,6 @@ dividend_desc = "Dividends are a portion of a company's profits that it distribu
 eps_desc = "Earnings Per Share (EPS) is a measure of a company's profitability that tells you how much profit it has generated for each outstanding share of its stock. It's calculated by dividing the company's total earnings by the number of shares available to the public. EPS helps investors gauge a company's financial performance and is a key factor in evaluating its stock's value and potential for growth"
 
 
-
-# Get dividends data
-def getStockDividends(ticker):
-    tkr = yf.Ticker(ticker)
-    div_data = tkr.get_dividends()
-    return div_data.tail(20)
-
-
 # Get stock data
 def getTicker(ticker):
     tkr = yf.Ticker(ticker)
