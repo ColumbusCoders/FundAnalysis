@@ -88,20 +88,7 @@ with tab1:
         )
     with row2_1:
         st.subheader("Dividends ")
-        tkr = getTicker(ticker)
-        div_data = tkr.get_dividends()
-        df = div_data.tail(20)
-        fig = px.bar(
-                        df,
-                        x=df.index,
-                        y="Dividends",
-                        title="Dividends by Year",
-                        text_auto=True,
-                        color_discrete_sequence=["#c681eb"],
-                    )
-        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
-        st.markdown(eps_desc)
 
 
 with tab2:
