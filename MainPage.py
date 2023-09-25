@@ -21,7 +21,7 @@ eps_desc = "Earnings Per Share (EPS) is a measure of a company's profitability t
 
 
 # Get dividends data
-def getDividends(ticker):
+def getStockDividends(ticker):
     tkr = yf.Ticker(ticker)
     div_data = tkr.get_dividends()
     return div_data.tail(20)
@@ -96,6 +96,21 @@ with tab1:
         )
     with row2_1:
         st.subheader("Dividends ")
+        tkr = getTicker(ticker)
+        div_data = tkr.get_dividends()
+        df = div_data.tail(20)
+        fig = px.bar(
+                        df,
+                        x=df.index,
+                        y="Dividends",
+                        title="Dividends by Year",
+                        text_auto=True,
+                        color_discrete_sequence=["#c681eb"],
+                    )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+        st.markdown(eps_desc)
+
 
 with tab2:
 
@@ -244,11 +259,49 @@ with tab3:
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
         st.markdown("Yearly Income statement")
+    # Row #2
+    row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
+
+    with row4_1:
+        st.subheader("Liabilities Vs Equity ")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.balancesheet)
+
+        fig = go.Figure(data=[
+            go.Bar(name='Liabilities', x=result_df['year'], y=result_df["Total Liabilities Net Minority Interest"]),
+            go.Bar(name='Equity', x=result_df['year'], y=result_df["Common Stock Equity"])
+        ])
+        fig.update_layout(barmode='stack')
+
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        st.markdown("Yearly Income statement")
+
 
     with st.expander("Reference Data"):
         df=getTicker(st.session_state.ticker ).balancesheet
         st.dataframe(df.style.highlight_max(axis=1),use_container_width=True)
 
+    with row4_2:
+        st.subheader("Equity")
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.balancesheet)
+
+        fig = px.bar(
+                    result_df,
+                    x="year",
+                    y="Common Stock Equity",
+                    title="Equity over the Year",
+                    text_auto=True,
+                    color_discrete_sequence=["#42230b"],
+                )
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        st.markdown("Yearly Income statement")
+    # Row #2
+    row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
 
 with tab4:
     # Row #1
