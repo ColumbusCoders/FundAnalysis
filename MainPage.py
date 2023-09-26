@@ -5,11 +5,25 @@ Created on Fri Sep 15 18:11:20 2023
 
 @author: saravananveeramani
 """
+
+from pathlib import Path
+
+import appdirs as ad
+
+CACHE_DIR = ".cache"
+
+# Force appdirs to say that the cache dir is .cache
+ad.user_cache_dir = lambda *args: CACHE_DIR
+
+# Create the cache dir if it doesn't exist
+Path(CACHE_DIR).mkdir(exist_ok=True)
+
+import yfinance as yf
+
 import streamlit as st
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-import yfinance as yf
 import pandas as pd
 
 
