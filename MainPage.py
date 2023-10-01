@@ -43,7 +43,7 @@ LIABILITY_ = "Liabilities are debts or obligations a company owes, including loa
 
 
 def millify(n):
-    millnames = ['',' Thousand',' Million',' Billion',' Trillion']
+    millnames = ['',' Thousand',' M',' B',' T']
     n = float(n)
     millidx = max(0,min(len(millnames)-1,
                         int(math.floor(0 if n == 0 else math.log10(abs(n))/3))))
@@ -78,8 +78,15 @@ def formatIncomeStmtData(df):
 st.set_page_config(page_title="Fundamental Analysis App", layout="wide")
 
 
+with st.form("my_form"):
+   col1, col2 = st.columns([3,1])
 
-ticker = st.text_input("Stock name", key="ticker",value="AAPL")
+   with col1:
+       ticker = st.text_input("Enter a stock name", key="ticker",value="AAPL")
+   with col2:
+       st.write("")
+       st.write("")
+       submitted = st.form_submit_button("Go")
 
 with st.container():
     col1, col2, col3 = st.columns(3)
