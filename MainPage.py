@@ -25,6 +25,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import pandas as pd
+import math
 
 
 # Functions Starts
@@ -39,6 +40,15 @@ OPERATING_EXP = "Operating expenses are the costs incurred to run the day-to-day
 GROSS_PROFIT = " Gross profit is the profit remaining after deducting the cost of goods sold (COGS) from revenue. Example: ABC Corporation had revenue of $1,000,000 and COGS of $400,000, resulting in a gross profit of $600,000."
 ASSET_ = "Assets are everything a company owns with monetary value, including cash, buildings, equipment, and investments.Example: ABC Corporation's assets include $500,000 in cash, a building valued at $1,000,000, and machinery valued at $300,000."
 LIABILITY_ = "Liabilities are debts or obligations a company owes, including loans, accounts payable, and accrued expenses. Example: ABC Corporation has liabilities of $400,000, which include a bank loan of $200,000 and accounts payable of $200,000."
+
+
+def millify(n):
+    millnames = ['',' Thousand',' Million',' Billion',' Trillion']
+    n = float(n)
+    millidx = max(0,min(len(millnames)-1,
+                        int(math.floor(0 if n == 0 else math.log10(abs(n))/3))))
+
+    return '{:.0f}{}'.format(n / 10**(3 * millidx), millnames[millidx])
 
 # Get dividends data
 def getDividends(ticker):
@@ -70,6 +80,20 @@ st.set_page_config(page_title="Fundamental Analysis App", layout="wide")
 
 
 ticker = st.text_input("Stock name", key="ticker",value="AAPL")
+
+with st.container():
+    col1, col2, col3 = st.columns(3)
+    df = getTicker(ticker)
+
+    with col1:
+        st.metric(label="P/E Ratio", value='{:.0f}'.format(df.info["forwardPE"]))
+    with col2:
+        dy= "N/A"
+        if "dividendYield" in df.info :
+            dy = '{:.2f}'.format(df.info["dividendYield"] * 100)
+        st.metric(label="Dividend Yield", value=dy)
+    with col3:
+        st.metric(label="Market Cap", value=millify(df.info["marketCap"]))
 
 
 st.header("{}".format(getStockName(ticker)))
@@ -111,7 +135,6 @@ with tab1:
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
-        st.markdown(EPS_DESC)
     row1_space2, row2_1, row2_space2, row2_2, row2_space3 = st.columns(
             (0.1, 1, 0.1, 1, 0.1)
         )
