@@ -40,8 +40,17 @@ OPERATING_EXP = "Operating expenses are the costs incurred to run the day-to-day
 GROSS_PROFIT = " Gross profit is the profit remaining after deducting the cost of goods sold (COGS) from revenue. Example: ABC Corporation had revenue of $1,000,000 and COGS of $400,000, resulting in a gross profit of $600,000."
 ASSET_ = "Assets are everything a company owns with monetary value, including cash, buildings, equipment, and investments.Example: ABC Corporation's assets include $500,000 in cash, a building valued at $1,000,000, and machinery valued at $300,000."
 LIABILITY_ = "Liabilities are debts or obligations a company owes, including loans, accounts payable, and accrued expenses. Example: ABC Corporation has liabilities of $400,000, which include a bank loan of $200,000 and accounts payable of $200,000."
-
-
+CASHFLOW_DESC = """
+:blue[Operating Cash Flow (OCF):] \n
+Positive OCF: A positive operating cash flow indicates that a company is generating more cash from its core operations than it is spending. This is generally a positive sign of financial health. It allows the company to reinvest in its business, fund day-to-day operations, and potentially expand. It supports growth by providing the necessary working capital to meet current obligations and invest in new opportunities.\n
+Negative OCF: A negative operating cash flow suggests that the company's core operations are not generating sufficient cash to cover its expenses. This could be due to a variety of factors, such as declining sales or inefficiencies in operations. To sustain or achieve growth, the company may need to address these issues and improve its operational efficiency.\n
+:blue[Investing Cash Flow (ICF):] \n
+Positive ICF: When a company has a positive investing cash flow, it typically means that it is making investments in assets such as property, plant, equipment, or acquisitions. These investments can be essential for long-term growth. They can lead to increased production capacity, improved technology, or expansion into new markets, all of which can contribute to future revenue growth.\n
+Negative ICF: A negative investing cash flow may indicate that the company is divesting assets or selling off investments. While this can provide short-term cash, it might hinder long-term growth prospects if the company is not reinvesting in ways that will drive future revenue.\n
+:blue[Financing Cash Flow (FCF):]\n
+Positive FCF: A positive financing cash flow often comes from sources like issuing debt, selling equity, or obtaining loans. While these actions can provide funds for growth initiatives, they also come with financial obligations (interest payments, dividends, etc.). Careful management of financing activities is necessary to ensure that the cost of capital doesn't outweigh the returns from growth investments.\n
+Negative FCF: A negative financing cash flow may result from activities like repaying debt or buying back stock. These actions can reduce financial leverage but may limit the funds available for growth. However, they can also be part of a financial strategy to optimize capital structure. """
+REPURCHASE_DESC = "A company buys back its own shares of stock using its available cash. This action can indicate that the company believes its stock is undervalued or wants to reduce the number of outstanding shares, potentially increasing the ownership stake of existing shareholders."
 def millify(n):
     millnames = ['',' Thousand',' M',' B',' T']
     n = float(n)
@@ -88,10 +97,14 @@ with st.form("my_form"):
        st.write("")
        submitted = st.form_submit_button("Go")
 
+
+
+
+st.header("{}".format(getStockName(ticker)))
+
 with st.container():
     col1, col2, col3 = st.columns(3)
     df = getTicker(ticker)
-
     with col1:
         st.metric(label="P/E Ratio", value='{:.0f}'.format(df.info["forwardPE"]))
     with col2:
@@ -103,14 +116,14 @@ with st.container():
         st.metric(label="Market Cap", value=millify(df.info["marketCap"]))
 
 
-st.header("{}".format(getStockName(ticker)))
-
 tab1, tab2, tab3,tab4 = st.tabs(["Key Data","Income Statement", "Balance Sheet", "Cash Flow"])
 with tab1:
 
     row1_space1, row1_1, row1_space2, row1_2, row1_space3 = st.columns(
-        (0.1, 1, 0.1, 1, 0.1)
-    )
+            (0.1, 1, 0.1, 1, 0.1)
+        )
+
+
     with row1_1:
         st.subheader("Profit Margins",help=NET_PROFIT_MARGIN)
         df = getTicker(ticker)
@@ -171,7 +184,6 @@ with tab2:
                     color_discrete_sequence=["#81c1eb"],
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-        st.markdown("Yearly Income statement")
 
 
     with row3_2:
@@ -189,7 +201,6 @@ with tab2:
                     color_discrete_sequence=["#e6859c"],
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-        st.markdown("Yearly Income statement")
 
 
     # Row # 2
@@ -278,7 +289,6 @@ with tab3:
                     color_discrete_sequence=["#1aab6c"],
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-        st.markdown("Yearly Income statement")
 
     with row3_2:
         st.subheader("Liabilities",help=LIABILITY_)
@@ -294,7 +304,6 @@ with tab3:
                     color_discrete_sequence=["#db831f"],
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-        st.markdown("Yearly Income statement")
     # Row #2
     row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
         (0.1, 1, 0.1, 1, 0.1)
@@ -312,7 +321,6 @@ with tab3:
         fig.update_layout(barmode='stack')
 
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-        st.markdown("Yearly Income statement")
 
 
     with st.expander("Reference Data"):
@@ -333,7 +341,6 @@ with tab3:
                     color_discrete_sequence=["#42230b"],
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-        st.markdown("Yearly Income statement")
     # Row #2
     row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
         (0.1, 1, 0.1, 1, 0.1)
@@ -359,7 +366,6 @@ with tab4:
                     color_discrete_sequence=["#bfdb1f"],
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-        st.markdown("Yearly Income statement")
 
     with row3_2:
         st.subheader("Change in Cash",help=CHANGE_IN_CASH)
@@ -375,7 +381,38 @@ with tab4:
                     color_discrete_sequence=["#dbc81f"],
                 )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-        st.markdown("Yearly Income statement")
+
+    row4_space1, row4_1, row4_space2, row4_2, row4_space3 = st.columns(
+        (0.1, 1, 0.1, 1, 0.1)
+    )
+
+    with row4_1:
+        st.subheader("Operating,Investing,Financing Cashflows ",help=CASHFLOW_DESC)
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.cashflow)
+
+        fig = go.Figure(data=[
+            go.Bar(name='Operating', x=result_df['year'], y=result_df["Operating Cash Flow"]),
+            go.Bar(name='Investing', x=result_df['year'], y=result_df["Investing Cash Flow"]),
+            go.Bar(name='Financing', x=result_df['year'], y=result_df["Financing Cash Flow"])
+
+        ])
+        fig.update_layout(barmode='group')
+
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+    with row4_2:
+        st.subheader("Repurchase Of Stock ",help=REPURCHASE_DESC)
+        df = getTicker(ticker)
+        result_df = formatIncomeStmtData(df.cashflow)
+
+        fig = go.Figure(data=[
+            go.Bar(name='Repurchase', x=result_df['year'], y=result_df["Repurchase Of Capital Stock"]),
+
+        ])
+        fig.update_layout(barmode='group')
+
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
     with st.expander("Reference Data"):
         df=getTicker(st.session_state.ticker ).cashflow
